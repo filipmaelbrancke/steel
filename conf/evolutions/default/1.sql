@@ -9,19 +9,20 @@ CREATE TABLE person (
   PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_person_email ON person (email);
+CREATE UNIQUE INDEX CONCURRENTLY person_email_idx ON person (email);
 
 CREATE TABLE exercise_type (
   id serial NOT NULL,
   name varchar(255) NOT NULL,
   description TEXT,
   created_at timestamp with time zone default(now() at time zone 'utc'),
-  updated_at timestamp with time zone
+  updated_at timestamp with time zone,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE exercise (
   id serial NOT NULL,
-  type int references exercise_type(id) NOT NULL,
+  kind int references exercise_type(id) NOT NULL,
   name varchar(255) NOT NULL,
   reps int,
   weight int,
@@ -29,7 +30,8 @@ CREATE TABLE exercise (
   notes text,
   person int references person(id),
   created_at timestamp with time zone default(now() at time zone 'utc'),
-  updated_at timestamp with time zone
+  updated_at timestamp with time zone,
+  PRIMARY KEY (id)
 );
   
 
@@ -37,7 +39,7 @@ CREATE TABLE exercise (
  
 DROP TABLE person;
 
-DROP INDEX idx_person_email;
+DROP INDEX person_email_idx;
 
 DROP TABLE exercise_type;
 
