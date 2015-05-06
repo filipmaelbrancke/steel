@@ -19,9 +19,9 @@ trait ExerciseTypesComponent {
     def id           = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name         = column[String]("name")
     def description  = column[String]("description")
-    def createdAt = column[Option[Date]]("created_at")
-    def updatedAt = column[Option[Date]]("updated_at")
-    def *         = (id.?, name, description, createdAt, updatedAt) <> (ExerciseType.tupled, ExerciseType.unapply _)
+    def createdAt    = column[Option[Date]]("created_at")
+    def updatedAt    = column[Option[Date]]("updated_at")
+    def *            = (id.?, name, description, createdAt, updatedAt) <> (ExerciseType.tupled, ExerciseType.unapply _)
   }
 }
 
