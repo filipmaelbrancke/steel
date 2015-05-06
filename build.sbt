@@ -9,11 +9,11 @@ scalaVersion := "2.11.1"
 //scalaVersion := "2.10.4"
 
 libraryDependencies ++= Seq(
+  jdbc,
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
-  javaJdbc,
   cache,
   ws,
-  "com.typesafe.play" % "play-slick_2.11" % "0.8.1",
+  "com.typesafe.slick" %% "slick"      % "3.0.0-RC1",
   "org.slf4j" % "slf4j-nop" % "1.6.4"
 )
 
