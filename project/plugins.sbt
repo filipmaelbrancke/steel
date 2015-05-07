@@ -1,6 +1,7 @@
 resolvers ++= Seq(
   "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
-  "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/"
+  "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/",
+  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
 
 // The Play plugin
