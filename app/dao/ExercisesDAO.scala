@@ -3,6 +3,8 @@ package dao
 import scala.concurrent.Future
 
 import models.Exercise
+import models.Person
+import models.ExerciseType
 
 
 import play.api.Play.current
