@@ -7,6 +7,11 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.1"
 //scalaVersion := "2.10.4"
+resolvers ++= Seq(
+  "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
+  "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/",
+  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+)
 
 libraryDependencies ++= Seq(
   jdbc,
