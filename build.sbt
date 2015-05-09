@@ -19,8 +19,10 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "com.typesafe.slick" %% "slick"      % "3.0.0-RC1",
-  "org.slf4j" % "slf4j-nop" % "1.6.4"//,
- // "org.specs2" %% "specs2-core" % "3.6" % "test"
+  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "joda-time" % "joda-time" % "2.7",
+  "org.joda" % "joda-convert" % "1.7",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0"
 )
 
 //scalacOptions in Test ++= Seq("-Yrangepos")

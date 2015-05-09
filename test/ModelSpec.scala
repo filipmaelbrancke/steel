@@ -15,6 +15,7 @@ import dao.ExerciseTypesDAO
 import models.Person
 import models.Exercise
 import models.ExerciseType
+import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
 class ModelSpec extends Specification {
@@ -31,7 +32,7 @@ class ModelSpec extends Specification {
      def peopleDao       = new PeopleDAO
 
      "be retrieved by name" in new WithApplication {
-       Await.result(exerciseTypeDao.insert(ExerciseType("lift", "resistance training with weights")), Duration.Inf)
+       Await.result(exerciseTypeDao.insert(ExerciseType(0,"lift", "resistance training with weights", Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
        val exerciseType = Await.result(exerciseTypeDao.findByName("lift"), Duration.Inf).get
 
        exerciseType.name must equalTo("lift")

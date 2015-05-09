@@ -6,22 +6,20 @@ import models.ExerciseType
 
 import play.api.Play.current
 import slick.lifted.Tag
-import java.util.Date
-import java.sql.{ Date => SqlDate }
-import java.sql.Timestamp
 import slick.driver.PostgresDriver.api._
+import com.github.tototoshi.slick.PostgresJodaSupport._
+import org.joda.time.DateTime
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.db.DB
 
 trait ExerciseTypesComponent { 
   class ExerciseTypes(tag: Tag) extends Table[ExerciseType](tag, "exercise_type") {
-    implicit val dateColumnType = MappedColumnType.base[Date, Long](d => d.getTime, d => new Date(d))
     def id           = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name         = column[String]("name")
     def description  = column[String]("description")
-    def createdAt    = column[Option[Date]]("created_at")
-    def updatedAt    = column[Option[Date]]("updated_at")
-    def *            = (id.?, name, description, createdAt, updatedAt) <> (ExerciseType.tupled, ExerciseType.unapply _)
+    def createdAt    = column[Option[DateTime]]("created_at")
+    def updatedAt    = column[Option[DateTime]]("updated_at")
+    def *            = (id,name, description, createdAt, updatedAt) <> (ExerciseType.tupled, ExerciseType.unapply _)
   }
 }
 
@@ -38,4 +36,15 @@ class ExerciseTypesDAO extends ExerciseTypesComponent {
 
     db.run(query.result).map(rows => rows.map { case (id, name) => (id.toString, name) })
   }
+
+  def findByName(name: String): Future[Option[ExerciseType]] = 
+    db.run(exerciseTypes.filter(_.name === name).result.headOption)
+
+   /** Insert a new exerciseType. */
+   def insert(exerciseType: ExerciseType): Future[Unit] =
+     db.run(exerciseTypes += exerciseType).map(_ => ())
+
+   /** Insert new computers. */
+   def insert(exerciseTypes: Seq[ExerciseType]): Future[Unit] =
+     db.run(this.exerciseTypes ++= exerciseTypes).map(_ => ())
 }

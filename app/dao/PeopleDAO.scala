@@ -6,22 +6,21 @@ import models.Person
 
 import play.api.Play.current
 import slick.lifted.Tag
-import java.util.Date
-import java.sql.{ Date => SqlDate }
-import java.sql.Timestamp
 import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.db.DB
+import slick.driver.PostgresDriver.api._
+import com.github.tototoshi.slick.PostgresJodaSupport._
+import org.joda.time.DateTime
 
 trait PeopleComponent { 
   class People(tag: Tag) extends Table[Person](tag, "person") {
-    implicit val dateColumnType = MappedColumnType.base[Date, Long](d => d.getTime, d => new Date(d))
     def id        = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def email     = column[String]("email")
     def password  = column[String]("password")
-    def createdAt = column[Option[Date]]("created_at")
-    def updatedAt = column[Option[Date]]("updated_at")
-    def *         = (id.?, email, password, createdAt, updatedAt) <> (Person.tupled, Person.unapply _)
+    def createdAt = column[Option[DateTime]]("created_at")
+    def updatedAt = column[Option[DateTime]]("updated_at")
+    def *         = (id, email, password, createdAt, updatedAt) <> (Person.tupled, Person.unapply _)
   }
 }
 
