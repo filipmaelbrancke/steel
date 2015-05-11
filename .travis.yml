@@ -1,0 +1,13 @@
+  language: scala
+
+  jdk:
+    - oraclejdk8
+
+  script:
+    - sbt +test 
+
+  addons:
+    postgresql: "9.3"
+
+  before_script:
+    - psql -c 'create database steel_dev;' -U postgres
