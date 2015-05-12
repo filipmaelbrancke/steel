@@ -1,11 +1,12 @@
 resolvers ++= Seq(
   "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
   "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/",
-  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
+  "Typesafe ivy" at "http://dl.bintray.com/typesafe/ivy-releases"
 )
 
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.8")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.0-RC1")
 
 // web plugins
 
