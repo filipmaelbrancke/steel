@@ -8,7 +8,6 @@ scalaVersion := "2.11.5"
 resolvers ++= Seq(
   "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
   "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/",
-  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
   "Typesafe ivy" at "http://dl.bintray.com/typesafe/ivy-releases",
   "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 )
