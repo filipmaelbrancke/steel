@@ -4,12 +4,15 @@ import scala.concurrent.Future
 
 import models.ExerciseType
 
-import play.api.Play.current
+import play.api.Play
+import play.api.db.slick.DatabaseConfigProvider
+import play.api.db.slick.HasDatabaseConfig
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import slick.driver.JdbcProfile
 import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import org.joda.time.DateTime
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.db.DB
 
 trait ExerciseTypesComponent { 
@@ -23,9 +26,11 @@ trait ExerciseTypesComponent {
   }
 }
 
-class ExerciseTypesDAO extends ExerciseTypesComponent {
+class ExerciseTypesDAO extends ExerciseTypesComponent with HasDatabaseConfig[JdbcProfile] {
 
-  private def db: Database = Database.forDataSource(DB.getDataSource())
+//  private def db: Database = Database.forDataSource(DB.getDataSource())
+
+  protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   val exerciseTypes =  TableQuery[ExerciseTypes]
 
