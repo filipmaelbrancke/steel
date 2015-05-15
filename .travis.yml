@@ -10,4 +10,4 @@
     postgresql: "9.3"
 
   before_script:
-    - psql -c 'create database steel_test; create user steel_test with password "test"; grant all privileges on database steel_test to steel_test' -U postgres
+    - psql -c 'create database steel_test; create user steel_test with password `test`; grant all privileges on database steel_test to steel_test' -U postgres
