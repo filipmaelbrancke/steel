@@ -26,5 +26,6 @@ libraryDependencies ++= Seq(
 )
 
 scalacOptions in Test ++= Seq("-Yrangepos")
+javaOptions in Test += "-Dconfig.file=conf/test.conf"
 
 fork in run := false
