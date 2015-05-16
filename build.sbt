@@ -22,7 +22,8 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0",
-  specs2 % Test
+  specs2 % Test,
+  "com.adrianhurt" %% "play-bootstrap3" % "0.4.2"
 )
 
 scalacOptions in Test ++= Seq("-Yrangepos")
