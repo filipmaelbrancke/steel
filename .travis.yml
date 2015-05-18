@@ -4,7 +4,7 @@
     - oraclejdk8
 
   script:
-    - sbt +test 
+    - "./ci/run-tests.sh"
 
   addons:
     postgresql: "9.3"

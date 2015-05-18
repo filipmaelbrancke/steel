@@ -28,7 +28,8 @@ libraryDependencies ++= Seq(
 )
 
 scalacOptions in Test ++= Seq("-Yrangepos")
-javaOptions in Test += "-Dconfig.file=conf/test.conf"
+javaOptions in Test ++= Seq("-Dconfig.file=conf/test.conf",
+ "-Dflyway.user=steel_test","-Dflyway.password=test", "-Dflyway.url=jdbc:postgresql:steel_test")
 
 Seq(flywaySettings: _*)
 
