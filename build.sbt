@@ -30,4 +30,18 @@ libraryDependencies ++= Seq(
 scalacOptions in Test ++= Seq("-Yrangepos")
 javaOptions in Test += "-Dconfig.file=conf/test.conf"
 
+Seq(flywaySettings: _*)
+
+flywayUrl  := "jdbc:postgresql:steel_dev"
+
+flywayUser := "steel_dev"
+
+flywayPassword := "huehuehue"
+
+flywaySchemas := Seq("public")
+
+flywayTable := "schema_history"
+
+flywayLocations := Seq("filesystem:sql")
+
 fork in run := false

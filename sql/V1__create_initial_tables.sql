@@ -1,5 +1,3 @@
-# --- !Ups
- 
 CREATE TABLE person (
   id serial NOT NULL,
   email varchar(255) NOT NULL,
@@ -9,7 +7,7 @@ CREATE TABLE person (
   PRIMARY KEY (id)
 );
 
-CREATE UNIQUE INDEX CONCURRENTLY person_email_idx ON person (email);
+CREATE UNIQUE INDEX person_email_idx ON person (email);
 
 CREATE TABLE exercise_type (
   id serial NOT NULL,
@@ -34,13 +32,3 @@ CREATE TABLE exercise (
   PRIMARY KEY (id)
 );
   
-
-# --- !Downs
- 
-DROP TABLE person;
-
-DROP INDEX person_email_idx;
-
-DROP TABLE exercise_type;
-
-DROP TABLE exercise;
