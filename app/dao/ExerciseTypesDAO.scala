@@ -18,17 +18,16 @@ import play.api.db.DB
 trait ExerciseTypesComponent { 
   class ExerciseTypes(tag: Tag) extends Table[ExerciseType](tag, "exercise_type") {
     def id           = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def kind         = column[String]("kind")
     def name         = column[String]("name")
     def description  = column[String]("description")
     def createdAt    = column[Option[DateTime]]("created_at")
     def updatedAt    = column[Option[DateTime]]("updated_at")
-    def *            = (id,name, description, createdAt, updatedAt) <> (ExerciseType.tupled, ExerciseType.unapply _)
+    def *            = (id, kind, name, description, createdAt, updatedAt) <> (ExerciseType.tupled, ExerciseType.unapply _)
   }
 }
 
 class ExerciseTypesDAO extends ExerciseTypesComponent with HasDatabaseConfig[JdbcProfile] {
-
-//  private def db: Database = Database.forDataSource(DB.getDataSource())
 
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
@@ -49,7 +48,7 @@ class ExerciseTypesDAO extends ExerciseTypesComponent with HasDatabaseConfig[Jdb
    def insert(exerciseType: ExerciseType): Future[Unit] =
      db.run(exerciseTypes += exerciseType).map(_ => ())
 
-   /** Insert new computers. */
+   /** Insert new exerciseTypes. */
    def insert(exerciseTypes: Seq[ExerciseType]): Future[Unit] =
      db.run(this.exerciseTypes ++= exerciseTypes).map(_ => ())
 }

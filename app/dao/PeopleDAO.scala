@@ -37,4 +37,15 @@ class PeopleDAO extends PeopleComponent {
 
     db.run(query.result).map(rows => rows.map { case (id, email) => (id.toString, email) })
   }
+
+  def findByEmail(email: String): Future[Option[Person]] = 
+    db.run(people.filter(_.email === email).result.headOption)
+
+  /** Insert a new person. */
+  def insert(person: Person): Future[Unit] =
+    db.run(people += person).map(_ => ())
+
+  /** Insert new people. */
+  def insert(people: Seq[Person]): Future[Unit] =
+    db.run(this.people ++= people).map(_ => ())
 }

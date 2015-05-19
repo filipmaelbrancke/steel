@@ -26,17 +26,39 @@ class ModelSpec extends Specification {
 
    def dateIs(date: java.util.Date, str: String) = new java.text.SimpleDateFormat("yyyy-MM-dd").format(date) == str
 
-   "Exercise model" should {
-     def exercisesDao    = new ExercisesDAO
+   "ExerciseType model" should {
      def exerciseTypeDao = new ExerciseTypesDAO
-     def peopleDao       = new PeopleDAO
 
      "be retrieved by name" in new WithApplication {
-       val exerciseType = Await.result(exerciseTypeDao.findByName("lift"), Duration.Inf).get
+       val exerciseType = Await.result(exerciseTypeDao.findByName("barbell squats"), Duration.Inf).get
 
-       exerciseType.name must equalTo("lift")
-       exerciseType.description must equalTo("resistance training with weights")
+       exerciseType.name must equalTo("barbell squats")
+       exerciseType.description must equalTo("squats with a weighted barbell across the back of the shoulders")
      }
+   }
 
+   "Exercise model" should {
+     def exerciseTypeDao = new ExerciseTypesDAO
+     def exerciseDao     = new ExercisesDAO
+     def personDao       = new PeopleDAO
+
+     "be retrieved by name" in new WithApplication {
+       val exerciseType = Await.result(exerciseTypeDao.findByName("barbell squats"), Duration.Inf).get
+       exerciseType.name must equalTo("barbell squats")
+
+       Await.result(personDao.insert(Person(0, "fart@fart.com", "password123", Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
+
+       val person = Await.result(personDao.findByEmail("fart@fart.com"), Duration.Inf).get
+
+       person.email must equalTo("fart@fart.com")
+
+       //                                       id  fk -> type       reps       weight       time
+       //                                       notes               fk -> person createdAt updatedAt
+       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())).pp), Duration.Inf)
+
+       val exercise = Await.result(exerciseDao.findLast(1), Duration.Inf).head
+       
+       exercise.kind must equalTo(exerciseType.id)
+     }
    }
 }

@@ -19,18 +19,16 @@ trait ExercisesComponent {
   class Exercises(tag: Tag) extends Table[Exercise](tag, "exercise") {
     
     def id        = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def name      = column[String]("name")
     def kind      = column[Long]("kind")
     def reps      = column[Long]("reps")
-    def weight    = column[Long]("weight")
-    def time      = column[Long]("time")
+    def weight    = column[Float]("weight", O.SqlType("numeric(4,2)"))
+    def time      = column[Float]("time", O.SqlType("numeric(4,2)"))
     def notes     = column[String]("notes")
     def person    = column[Long]("person")
     def createdAt = column[Option[DateTime]]("created_at")
     def updatedAt = column[Option[DateTime]]("updated_at")
     def *         = (id, 
       kind, 
-      name, 
       reps.?, 
       weight.?, 
       time.?, 
@@ -48,11 +46,15 @@ class ExercisesDAO extends ExercisesComponent {
 
   val exercises =  TableQuery[Exercises]
 
-  def options: Future[Seq[(String, String)]] = {
-    val query = (for {
-      exercise <- exercises
-    } yield ( exercise.id, exercise.name)).sortBy(_._2)
+  def findLast(limit: Int): Future[Seq[Exercise]] =
+    db.run(exercises.sortBy(_.createdAt.desc).take(limit).result)
 
-    db.run(query.result).map(rows => rows.map { case (id, name) => (id.toString, name) })
-  }
+   /** Insert a new exercise. */
+   def insert(exercise: Exercise): Future[Unit] =
+     db.run(exercises += exercise).map(_ => ())
+
+   /** Insert new exercises. */
+   def insert(exercises: Seq[Exercise]): Future[Unit] =
+     db.run(this.exercises ++= exercises).map(_ => ())
+
 }
