@@ -11,6 +11,7 @@ CREATE UNIQUE INDEX person_email_idx ON person (email);
 
 CREATE TABLE exercise_type (
   id serial NOT NULL,
+  kind varchar(255) NOT NULL,
   name varchar(255) NOT NULL,
   description TEXT,
   created_at timestamp with time zone default(now() at time zone 'utc'),
@@ -21,10 +22,9 @@ CREATE TABLE exercise_type (
 CREATE TABLE exercise (
   id serial NOT NULL,
   kind int references exercise_type(id) NOT NULL,
-  name varchar(255) NOT NULL,
   reps int,
-  weight decimal(3,2),
-  time decimal(3,2),
+  weight numeric(4,2),
+  time numeric(4,2),
   notes text,
   person int references person(id),
   created_at timestamp with time zone default(now() at time zone 'utc'),
