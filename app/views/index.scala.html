@@ -1,9 +1,17 @@
-@(message: String)
+@(workouts: List[Exercise])
 
 @main("Steel - The Workout Tracker") {
   <div class="container">
     <h1>Steel Workout Tracker</h1>
-    @message
+
+    <h3>Recent workouts</h2>
+    <ul>
+      @for( exercise <- workouts) {
+      <li>@exercise.kind</li>
+      }
+    </ul>
+
+
   </div>
 
 }

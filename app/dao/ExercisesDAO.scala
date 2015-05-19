@@ -46,8 +46,8 @@ class ExercisesDAO extends ExercisesComponent {
 
   val exercises =  TableQuery[Exercises]
 
-  def findLast(limit: Int): Future[Seq[Exercise]] =
-    db.run(exercises.sortBy(_.createdAt.desc).take(limit).result)
+  def findLast(limit: Int): Future[List[Exercise]] =
+    db.run(exercises.sortBy(_.createdAt.desc).take(limit).result).map(_.toList)
 
    /** Insert a new exercise. */
    def insert(exercise: Exercise): Future[Unit] =
