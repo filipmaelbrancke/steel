@@ -1,0 +1,40 @@
+@(workoutForm: Form[Exercise], exerciseTypes: Seq[(String, String)])(implicit messages: Messages)
+
+@import helper._
+
+
+@main("Steel - Add a workout") {
+
+  <h1>Add a workout</h1>
+  @form(action=routes.Application.save()) {
+      <div class="alert alert-error">
+        @for(error <- workoutForm.errors) {
+        <p>@error.key -> @error.message</p>
+        } 
+      </div>
+
+      <fieldset>
+      <input type="hidden" name="id" value="0" />
+    @select(
+      workoutForm("kind"),
+      exerciseTypes,
+      '_label -> "Type", '_default -> "-- Choose exercise type --",
+      '_showConstraints -> false
+    )
+
+    @inputText(workoutForm("reps"), '_label -> "Reps")
+    @inputText(workoutForm("weight"), '_label -> "Weight")
+    @inputText(workoutForm("time"), '_label -> "Time")
+    @inputText(workoutForm("notes"), '_label -> "Notes")
+    @inputText(workoutForm("person"), '_label -> "Person")
+
+  </fieldset>
+
+  <div class="actions">
+    <input type="submit" value="Add workout" class="btn primary" />
+  </div>
+
+  }
+
+}
+

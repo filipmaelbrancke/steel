@@ -1,10 +1,15 @@
-@(workouts: List[Exercise])
+@(workouts: List[Exercise])(implicit flash: play.api.mvc.Flash, messages: Messages)
 
 @main("Steel - The Workout Tracker") {
   <div class="container">
     <div class="row">
       <div class="col-lg-6 col-lg-offset-3 text-center">
         <h1>Steel Workout Tracker</h1>
+         @flash.get("success").map { message =>
+           <div class="alert-message warning">
+             <strong>Done!</strong> @message
+           </div>
+         }
         <a href="/workouts/new" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-edit"></span> Log your workout</a>
         
         <h3>Recent workouts</h2>
