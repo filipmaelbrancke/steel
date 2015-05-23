@@ -1,4 +1,4 @@
-@(workouts: List[Exercise])(implicit flash: play.api.mvc.Flash, messages: Messages)
+@(workouts: Page[(Exercise, ExerciseType)])(implicit flash: play.api.mvc.Flash, messages: Messages)
 
 @main("Steel - The Workout Tracker") {
   <div class="container">
@@ -13,11 +13,34 @@
         <a href="/workouts/new" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-edit"></span> Log your workout</a>
         
         <h3>Recent workouts</h2>
-          <ul>
-            @for( exercise <- workouts) {
-              <li>@exercise.kind</li>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Reps</th>
+                <th>Weight</th>
+                <th>Sets</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+            @Option(workouts.items).map { exercises =>
+              @exercises.map {
+                case (exercise, exerciseType) => {
+                <tr>
+                  <td>@exerciseType.name</td>
+                  <td>@exercise.reps</td>
+                  <td>@exercise.weight</td>
+                  <td></td>
+                  <td>@exercise.notes</td>
+                </tr>
+                  }
+              }
             }
-           </ul>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 

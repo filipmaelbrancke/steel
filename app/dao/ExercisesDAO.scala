@@ -5,6 +5,7 @@ import scala.concurrent.Future
 import models.Exercise
 import models.Person
 import models.ExerciseType
+import models.Page
 
 
 import play.api.Play.current
@@ -15,6 +16,7 @@ import play.api.db.DB
 import slick.driver.PostgresDriver.api._
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import org.joda.time.DateTime
+
 trait ExercisesComponent { 
   class Exercises(tag: Tag) extends Table[Exercise](tag, "exercise") {
     
@@ -40,14 +42,36 @@ trait ExercisesComponent {
   }
 }
 
-class ExercisesDAO extends ExercisesComponent {
+class ExercisesDAO extends ExercisesComponent with ExerciseTypesComponent {
 
   private def db: Database = Database.forDataSource(DB.getDataSource())
 
-  val exercises =  TableQuery[Exercises]
+  val exercises     = TableQuery[Exercises]
+  val exerciseTypes = TableQuery[ExerciseTypes]
+
+  def count(): Future[Int] = 
+    db.run(exercises.length.result)
 
   def findLast(limit: Int): Future[List[Exercise]] =
     db.run(exercises.sortBy(_.createdAt.desc).take(limit).result).map(_.toList)
+
+  def findWithType(limit: Int): Future[Page[(Exercise, ExerciseType)]] = {
+    val withExerciseType = 
+      (for {
+        (e, et) <- exercises join exerciseTypes on (_.kind === _.id)
+      } yield (e, et))
+      .take(limit)
+    
+    for {
+      totalRows <- count()
+      list = withExerciseType.result.map { rows => 
+        rows.collect { 
+          case (exercise, exerciseType) => (exercise, exerciseType)
+        }
+      }
+      result <- db.run(list)
+    } yield Page(result, 1, limit, totalRows)
+  }
 
    /** Insert a new exercise. */
    def insert(exercise: Exercise): Future[Unit] =

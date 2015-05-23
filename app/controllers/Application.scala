@@ -29,8 +29,8 @@ object Application extends Controller {
   val Home = Redirect(routes.Application.index)
 
   def index = Action.async { implicit request => 
-    val workouts = exerciseDao.findLast(10)
-    workouts.map(ex => Ok(views.html.index(ex)))
+    val workouts = exerciseDao.findWithType(10)
+    workouts.map(e => Ok(html.index(e)))
   }
 
   val workoutForm = Form(

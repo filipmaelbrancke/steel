@@ -60,5 +60,7 @@ class ModelSpec extends Specification {
        
        exercise.kind must equalTo(exerciseType.id)
      }
+
+     "be retrieved with ExerciseTypes" in new WithApplication {}
    }
 }
