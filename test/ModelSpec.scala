@@ -61,6 +61,19 @@ class ModelSpec extends Specification {
        exercise.kind must equalTo(exerciseType.id)
      }
 
-     "be retrieved with ExerciseTypes" in new WithApplication {}
+     "be retrieved with ExerciseTypes" in new WithApplication {
+       val exercisesWithType = Await.result(exerciseDao.findWithType(1), Duration.Inf)
+
+       exercisesWithType.items must have length(1)
+
+       // can't figure out how to iterate over this properly
+       exercisesWithType.items.map { ex =>
+         ex.pp /*.map {
+           case (exercise, exerciseType) => {
+             exerciseType.name must equalTo("barbell squats")
+           }
+         }*/
+       }
+     }
    }
 }
