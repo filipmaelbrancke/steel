@@ -23,6 +23,7 @@ CREATE TABLE exercise (
   id serial NOT NULL,
   kind int references exercise_type(id) NOT NULL,
   reps int,
+  sets int,
   weight numeric(5,2),
   time numeric(5,2),
   notes text,
