@@ -54,7 +54,7 @@ class ModelSpec extends Specification {
 
        //                                       id  fk -> type       reps       weight       time
        //                                       notes               fk -> person createdAt updatedAt
-       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())).pp), Duration.Inf)
+       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
 
        val exercise = Await.result(exerciseDao.findLast(1), Duration.Inf).head
        
@@ -62,18 +62,42 @@ class ModelSpec extends Specification {
      }
 
      "be retrieved with ExerciseTypes" in new WithApplication {
+
        val exercisesWithType = Await.result(exerciseDao.findWithType(1), Duration.Inf)
 
        exercisesWithType.items must have length(1)
 
-       // can't figure out how to iterate over this properly
-       exercisesWithType.items.map { ex =>
-         ex.pp /*.map {
+       Option(exercisesWithType.items).map { ex =>
+         ex.map {
            case (exercise, exerciseType) => {
              exerciseType.name must equalTo("barbell squats")
+             exercise.reps must equalTo(Some(3))
+             exercise.weight must equalTo(Some(285))
            }
-         }*/
+         }
        }
+     }
+
+     "retrieve workouts grouped by date" in new WithApplication {
+
+       val person = Await.result(personDao.findByEmail("fart@fart.com"), Duration.Inf).get
+       val squats = Await.result(exerciseTypeDao.findByName("barbell squats"), Duration.Inf).get
+       val bench  = Await.result(exerciseTypeDao.findByName("bench press"), Duration.Inf).get
+       // move me to a method
+       Await.result(
+         exerciseDao.insert(
+           Seq(
+             Exercise(0, squats.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())), 
+             Exercise(0, bench.id, Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())),
+             Exercise(0, squats.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))), 
+             Exercise(0, bench.id, Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1)))
+           )
+         ), 
+         Duration.Inf
+       )
+
+    // val workouts = Await.result(exerciseDao.workouts(), Duration.Inf)
+
      }
    }
 }
