@@ -52,9 +52,9 @@ class ModelSpec extends Specification {
 
        person.email must equalTo("fart@fart.com")
 
-       //                                       id  fk -> type       reps       weight       time
+       //                                       id  fk -> type    sets   reps       weight       time
        //                                       notes               fk -> person createdAt updatedAt
-       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
+       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
 
        val exercise = Await.result(exerciseDao.findLast(1), Duration.Inf).head
        
@@ -71,6 +71,7 @@ class ModelSpec extends Specification {
          ex.map {
            case (exercise, exerciseType) => {
              exerciseType.name must equalTo("barbell squats")
+             exercise.sets must equalTo(Some(3))
              exercise.reps must equalTo(Some(3))
              exercise.weight must equalTo(Some(285))
            }
@@ -87,10 +88,10 @@ class ModelSpec extends Specification {
        Await.result(
          exerciseDao.insert(
            Seq(
-             Exercise(0, squats.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())), 
-             Exercise(0, bench.id, Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())),
-             Exercise(0, squats.id, Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))), 
-             Exercise(0, bench.id, Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1)))
+             Exercise(0, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())), 
+             Exercise(0, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())),
+             Exercise(0, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))), 
+             Exercise(0, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1)))
            )
          ), 
          Duration.Inf

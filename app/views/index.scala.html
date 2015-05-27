@@ -19,8 +19,8 @@
               <tr>
                 <th>Name</th>
                 <th>Reps</th>
-                <th>Weight</th>
                 <th>Sets</th>
+                <th>Weight</th>
                 <th>Notes</th>
               </tr>
             </thead>
@@ -30,9 +30,9 @@
                 case (exercise, exerciseType) => {
                 <tr>
                   <td>@exerciseType.name</td>
+                  <td>@exercise.sets</td>
                   <td>@exercise.reps</td>
                   <td>@exercise.weight</td>
-                  <td></td>
                   <td>@exercise.notes</td>
                 </tr>
                 }

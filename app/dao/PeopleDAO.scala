@@ -4,14 +4,15 @@ import scala.concurrent.Future
 
 import models.Person
 
-import play.api.Play.current
+import play.api.Play
 import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.db.DB
 import slick.driver.PostgresDriver.api._
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import org.joda.time.DateTime
+import play.api.db.slick.DatabaseConfigProvider
+import slick.driver.JdbcProfile
 
 trait PeopleComponent { 
   class People(tag: Tag) extends Table[Person](tag, "person") {
@@ -26,7 +27,7 @@ trait PeopleComponent {
 
 class PeopleDAO extends PeopleComponent {
 
-  private def db: Database = Database.forDataSource(DB.getDataSource())
+  protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   val people =  TableQuery[People]
 
@@ -35,17 +36,17 @@ class PeopleDAO extends PeopleComponent {
       person <- people
     } yield ( person.id, person.email)).sortBy(_._2)
 
-    db.run(query.result).map(rows => rows.map { case (id, email) => (id.toString, email) })
+    dbConfig.db.run(query.result).map(rows => rows.map { case (id, email) => (id.toString, email) })
   }
 
   def findByEmail(email: String): Future[Option[Person]] = 
-    db.run(people.filter(_.email === email).result.headOption)
+    dbConfig.db.run(people.filter(_.email === email).result.headOption)
 
   /** Insert a new person. */
   def insert(person: Person): Future[Unit] =
-    db.run(people += person).map(_ => ())
+    dbConfig.db.run(people += person).map(_ => ())
 
   /** Insert new people. */
   def insert(people: Seq[Person]): Future[Unit] =
-    db.run(this.people ++= people).map(_ => ())
+    dbConfig.db.run(this.people ++= people).map(_ => ())
 }

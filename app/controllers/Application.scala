@@ -37,6 +37,7 @@ object Application extends Controller {
     mapping(
       "id"        -> longNumber,
       "kind"      -> longNumber,
+      "sets"      -> optional(longNumber),
       "reps"      -> optional(longNumber),
       "weight"    -> optional(of(floatFormat)),
       "time"      -> optional(of(floatFormat)),

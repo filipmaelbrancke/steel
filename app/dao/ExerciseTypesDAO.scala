@@ -13,7 +13,8 @@ import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import org.joda.time.DateTime
-import play.api.db.DB
+import play.api.db.slick.DatabaseConfigProvider
+import slick.driver.JdbcProfile
 
 trait ExerciseTypesComponent { 
   class ExerciseTypes(tag: Tag) extends Table[ExerciseType](tag, "exercise_type") {
@@ -38,17 +39,17 @@ class ExerciseTypesDAO extends ExerciseTypesComponent with HasDatabaseConfig[Jdb
       exercise <- exerciseTypes
     } yield ( exercise.id, exercise.name)).sortBy(_._2)
 
-    db.run(query.result).map(rows => rows.map { case (id, name) => (id.toString, name) })
+    dbConfig.db.run(query.result).map(rows => rows.map { case (id, name) => (id.toString, name) })
   }
 
   def findByName(name: String): Future[Option[ExerciseType]] = 
-    db.run(exerciseTypes.filter(_.name === name).result.headOption)
+    dbConfig.db.run(exerciseTypes.filter(_.name === name).result.headOption)
 
    /** Insert a new exerciseType. */
    def insert(exerciseType: ExerciseType): Future[Unit] =
-     db.run(exerciseTypes += exerciseType).map(_ => ())
+     dbConfig.db.run(exerciseTypes += exerciseType).map(_ => ())
 
    /** Insert new exerciseTypes. */
    def insert(exerciseTypes: Seq[ExerciseType]): Future[Unit] =
-     db.run(this.exerciseTypes ++= exerciseTypes).map(_ => ())
+     dbConfig.db.run(this.exerciseTypes ++= exerciseTypes).map(_ => ())
 }

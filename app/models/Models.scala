@@ -10,4 +10,4 @@ case class Person(id: Long, email: String, password: String, createdAt: Option[D
 
 case class ExerciseType(id: Long, kind: String, name: String, description: String, createdAt: Option[DateTime], updatedAt: Option[DateTime])
 
-case class Exercise(id: Long, kind: Long, reps: Option[Long], weight: Option[Float], time: Option[Float], notes: Option[String], person: Long, createdAt: Option[DateTime], updatedAt: Option[DateTime])
+case class Exercise(id: Long, kind: Long, sets: Option[Long], reps: Option[Long], weight: Option[Float], time: Option[Float], notes: Option[String], person: Long, createdAt: Option[DateTime], updatedAt: Option[DateTime])

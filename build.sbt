@@ -13,11 +13,10 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  jdbc,
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
   cache,
   ws,
-  "com.typesafe.play" %% "play-slick" % "1.0.0-RC1",
+  "com.typesafe.play" %% "play-slick" % "1.0.0-RC2",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
