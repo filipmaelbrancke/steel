@@ -25,6 +25,3 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
 
 // flyaway
 addSbtPlugin("org.flywaydb" % "flyway-sbt" % "3.2.1")
-
-// coveralls
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.1.0")
