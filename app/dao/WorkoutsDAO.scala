@@ -45,8 +45,10 @@ class WorkoutsDAO extends WorkoutsComponent with ExercisesComponent {
     dbConfig.db.run(workouts.length.result)
 
   def findLast(limit: Int): Future[List[Workout]] =
-    dbConfig.db.run(workouts.sortBy(_.createdAt.desc).take(limit).result).map(_.toList)
-
+    dbConfig.db.run(
+      workouts.sortBy(_.createdAt.desc)
+              .take(limit).result
+    ).map(_.toList)
 
   /** Insert a new workout. */
   def insert(workout: Workout): Future[Unit] =
