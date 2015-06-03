@@ -45,6 +45,3 @@ flywayLocations := Seq("filesystem:sql")
 
 fork in run := false
 
-import CoverallsPlugin.CoverallsKeys._
-
-coverallsToken := "Rgd35INMOfKzKZUql721cR6TFD7hiDDvP"
