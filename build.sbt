@@ -44,4 +44,3 @@ flywayTable := "schema_history"
 flywayLocations := Seq("filesystem:sql")
 
 fork in run := false
-

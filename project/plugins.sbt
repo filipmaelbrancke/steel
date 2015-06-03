@@ -3,8 +3,7 @@ resolvers ++= Seq(
   "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/",
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
   "Typesafe ivy" at "http://dl.bintray.com/typesafe/ivy-releases",
-  "Flyway" at "http://flywaydb.org/repo", 
-  Classpaths.sbtPluginReleases
+  "Flyway" at "http://flywaydb.org/repo"
 )
 
 // The Play plugin
@@ -29,4 +28,3 @@ addSbtPlugin("org.flywaydb" % "flyway-sbt" % "3.2.1")
 
 // coveralls
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.1.0")
-addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.0.0")
