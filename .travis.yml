@@ -15,3 +15,6 @@
     - psql -c "grant all privileges on database steel_test to steel_test;" -U postgres
 
   repo_token: Rgd35INMOfKzKZUql721cR6TFD7hiDDvP
+
+  after_script:
+    - if [[ $TRAVIS_TEST_RESULT == 0 && "$TRAVIS_BRANCH" == "master" ]]; then sbt "^publish"; fi
