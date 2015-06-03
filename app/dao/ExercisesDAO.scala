@@ -23,6 +23,7 @@ trait ExercisesComponent {
   class Exercises(tag: Tag) extends Table[Exercise](tag, "exercise") {
     
     def id        = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def workout   = column[Long]("workout")
     def kind      = column[Long]("kind")
     def sets      = column[Long]("sets")
     def reps      = column[Long]("reps")
@@ -33,6 +34,7 @@ trait ExercisesComponent {
     def createdAt = column[Option[DateTime]]("created_at")
     def updatedAt = column[Option[DateTime]]("updated_at")
     def *         = (id, 
+      workout,
       kind, 
       reps.?, 
       sets.?,
@@ -77,6 +79,14 @@ class ExercisesDAO extends ExercisesComponent with ExerciseTypesComponent {
       result <- dbConfig.db.run(list)
     } yield Page(result, 1, limit, totalRows)
   }
+
+  def dates():Unit = {
+    /*val dates = sql"select distinct(created_at::date) from exercise".as[String]
+    dbConfig.db.run(dates)
+    */
+   return ()
+  }
+  
 
   /** Insert a new exercise. */
   def insert(exercise: Exercise): Future[Unit] =

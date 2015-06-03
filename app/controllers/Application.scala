@@ -36,6 +36,7 @@ object Application extends Controller {
   val workoutForm = Form(
     mapping(
       "id"        -> longNumber,
+      "workout"   -> longNumber,
       "kind"      -> longNumber,
       "sets"      -> optional(longNumber),
       "reps"      -> optional(longNumber),
