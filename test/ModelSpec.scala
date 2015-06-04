@@ -17,7 +17,6 @@ import dao.WorkoutsDAO
 import models.Person
 import models.Exercise
 import models.ExerciseType
-import models.Workout
 
 import org.joda.time.DateTime
 
@@ -45,14 +44,11 @@ class ModelSpec extends Specification {
      def exerciseTypeDao = new ExerciseTypesDAO
      def exerciseDao     = new ExercisesDAO
      def personDao       = new PeopleDAO
-     def workoutDao      = new WorkoutsDAO
 
      "be retrieved by name" in new WithApplication {
        Await.result(personDao.insert(Person(0, "fart@fart.com", "password123", Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
 
        val person = Await.result(personDao.findByEmail("fart@fart.com"), Duration.Inf).get
-       Await.result(workoutDao.insert(Workout(0, person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
-       val workout      = Await.result(workoutDao.findLast(1), Duration.Inf).head
        val exerciseType = Await.result(exerciseTypeDao.findByName("barbell squats"), Duration.Inf).get
        exerciseType.name must equalTo("barbell squats")
 
@@ -60,7 +56,7 @@ class ModelSpec extends Specification {
 
        //                                       id workout fk -> type    sets   reps       weight       time
        //                                       notes               fk -> person createdAt updatedAt
-       Await.result(exerciseDao.insert(Exercise(0, workout.id, exerciseType.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
+       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
 
        val exercise = Await.result(exerciseDao.findLast(1), Duration.Inf).head
        
@@ -88,26 +84,24 @@ class ModelSpec extends Specification {
      "retrieve workouts" in new WithApplication {
 
        val person  = Await.result(personDao.findByEmail("fart@fart.com"), Duration.Inf).get
-       Await.result(workoutDao.insert(Workout(0, person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
        val squats  = Await.result(exerciseTypeDao.findByName("barbell squats"), Duration.Inf).get
        val bench   = Await.result(exerciseTypeDao.findByName("bench press"), Duration.Inf).get
-       val workout = Await.result(workoutDao.findLast(2), Duration.Inf)
+
        // move me to a method
        Await.result(
          exerciseDao.insert(
            Seq(
-             Exercise(0, workout(0).id, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())), 
-             Exercise(0, workout(0).id, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())),
-             Exercise(0, workout(1).id, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))), 
-             Exercise(0, workout(1).id, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1)))
+             Exercise(0, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())), 
+             Exercise(0, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())),
+             Exercise(0, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))), 
+             Exercise(0, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1)))
            )
          ), 
          Duration.Inf
        )
 
-       val workouts = Await.result(workoutDao.findLast(2), Duration.Inf)
-       workouts.length must equalTo(2)
-       //workouts.items must have length(4)
+       val dates = Await.result(exerciseDao.dates(), Duration.Inf)
+       dates.length must equalTo(2)
 
      }
    }
