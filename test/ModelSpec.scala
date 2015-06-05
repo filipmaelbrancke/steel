@@ -103,6 +103,10 @@ class ModelSpec extends Specification {
        val dates = Await.result(exerciseDao.dates(), Duration.Inf)
        dates.length must equalTo(2)
 
+       val workouts = Await.result(exerciseDao.workouts(2), Duration.Inf)
+
+       workouts.length must equalTo(2)
+
      }
    }
 }

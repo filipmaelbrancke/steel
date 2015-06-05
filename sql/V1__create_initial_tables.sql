@@ -9,14 +9,6 @@ CREATE TABLE person (
 
 CREATE UNIQUE INDEX person_email_idx ON person (email);
 
-CREATE TABLE workout(
-  id serial NOT NULL,
-  person int references person(id),
-  created_at timestamp with time zone default(now() at time zone 'utc'),
-  updated_at timestamp with time zone,
-  PRIMARY KEY (id)
-);
-
 CREATE TABLE exercise_type (
   id serial NOT NULL,
   kind varchar(255) NOT NULL,
@@ -36,10 +28,19 @@ CREATE TABLE exercise (
   time numeric(5,2),
   notes text,
   person  int references person(id),
-  workout int references workout(id),
   created_at timestamp with time zone default(now() at time zone 'utc'),
   updated_at timestamp with time zone,
   PRIMARY KEY (id)
 );
+
+CREATE TABLE sets (
+  id serial NOT NULL,
+  exercise int references exercise(id),
+  completed int,
+  created_at timestamp with time zone default(now() at time zone 'utc'),
+  updated_at timestamp with time zone,
+  PRIMARY KEY (id)
+);
+
 
 

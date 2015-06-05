@@ -89,4 +89,6 @@ class ExercisesDAO extends ExercisesComponent with ExerciseTypesComponent {
   def dates(): Future[Seq[String]] =
     dbConfig.db.run(sql"""select distinct(created_at::date) from exercise""".as[String])
 
+  //def workouts(limit: Int): Future
+
 }
