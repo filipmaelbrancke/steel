@@ -12,11 +12,12 @@ import scala.concurrent.duration.Duration
 import dao.PeopleDAO
 import dao.ExercisesDAO
 import dao.ExerciseTypesDAO
-import dao.WorkoutsDAO
+import dao.SetsDAO
 
 import models.Person
 import models.Exercise
 import models.ExerciseType
+import models.Set
 
 import org.joda.time.DateTime
 
@@ -54,9 +55,9 @@ class ModelSpec extends Specification {
 
        person.email must equalTo("fart@fart.com")
 
-       //                                       id workout fk -> type    sets   reps       weight       time
+       //                                       id workout fk -> type    weight       time
        //                                       notes               fk -> person createdAt updatedAt
-       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
+       Await.result(exerciseDao.insert(Exercise(0, exerciseType.id, Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
 
        val exercise = Await.result(exerciseDao.findLast(1), Duration.Inf).head
        
@@ -73,9 +74,6 @@ class ModelSpec extends Specification {
          ex.map {
            case (exercise, exerciseType) => {
              exerciseType.name must equalTo("barbell squats")
-             exercise.sets must equalTo(Some(3))
-             exercise.reps must equalTo(Some(3))
-             exercise.weight must equalTo(Some(285))
            }
          }
        }

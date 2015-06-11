@@ -22,11 +22,13 @@ trait SetsComponent {
     
     def id        = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def exercise  = column[Long]("exercise")
+    def reps      = column[Long]("reps")
     def completed = column[Long]("completed")
     def createdAt = column[Option[DateTime]]("created_at")
     def updatedAt = column[Option[DateTime]]("updated_at")
     def *         = (id, 
       exercise,
+      reps,
       completed, 
       createdAt, 
       updatedAt ) <> (Set.tupled, Set.unapply _)
@@ -54,6 +56,5 @@ class SetsDAO extends SetsComponent {
   /** Insert new sets. */
   def insert(sets: Seq[Set]): Future[Unit] =
     dbConfig.db.run(this.sets ++= sets).map(_ => ())
-
 
 }

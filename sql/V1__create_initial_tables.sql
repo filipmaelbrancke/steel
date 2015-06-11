@@ -33,14 +33,13 @@ CREATE TABLE exercise (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE sets (
+CREATE TABLE set (
   id serial NOT NULL,
   exercise int references exercise(id),
+  sets int,
   completed int,
+  weight numeric(5,2),
   created_at timestamp with time zone default(now() at time zone 'utc'),
   updated_at timestamp with time zone,
   PRIMARY KEY (id)
 );
-
-
-

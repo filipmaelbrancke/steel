@@ -24,19 +24,14 @@ trait ExercisesComponent {
     
     def id        = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def kind      = column[Long]("kind")
-    def sets      = column[Long]("sets")
-    def reps      = column[Long]("reps")
-    def weight    = column[Float]("weight", O.SqlType("numeric(4,2)"))
     def time      = column[Float]("time", O.SqlType("numeric(4,2)"))
     def notes     = column[String]("notes")
     def person    = column[Long]("person")
     def createdAt = column[Option[DateTime]]("created_at")
     def updatedAt = column[Option[DateTime]]("updated_at")
-    def *         = (id, 
+    def *         = (
+      id, 
       kind, 
-      reps.?, 
-      sets.?,
-      weight.?, 
       time.?, 
       notes.?, 
       person,
