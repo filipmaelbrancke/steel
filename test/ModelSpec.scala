@@ -21,6 +21,7 @@ import models.Set
 
 import org.joda.time.DateTime
 
+
 @RunWith(classOf[JUnitRunner])
 class ModelSpec extends Specification {
 
@@ -45,6 +46,7 @@ class ModelSpec extends Specification {
      def exerciseTypeDao = new ExerciseTypesDAO
      def exerciseDao     = new ExercisesDAO
      def personDao       = new PeopleDAO
+     def setDao          = new SetsDAO
 
      "be retrieved by name" in new WithApplication {
        Await.result(personDao.insert(Person(0, "fart@fart.com", "password123", Option(new DateTime()), Option(new DateTime()))), Duration.Inf)
@@ -86,24 +88,28 @@ class ModelSpec extends Specification {
        val bench   = Await.result(exerciseTypeDao.findByName("bench press"), Duration.Inf).get
 
        // move me to a method
-       Await.result(
-         exerciseDao.insert(
-           Seq(
-             Exercise(0, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())), 
-             Exercise(0, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())),
-             Exercise(0, squats.id, Option(3), Option(3), Option(285), Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))), 
-             Exercise(0, bench.id, Option(3), Option(3), Option(200), Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1)))
+
+       val exerciseSetMapping :Map[Exercise, Set] = Map(
+             Exercise(0, squats.id, Option(0), Option("Squats a lots"), person.id, Option(new DateTime()), Option(new DateTime())) -> Set(0, Option(0), 3, 300, Option(new DateTime()), Option(new DateTime())),
+             Exercise(0, bench.id, Option(0), Option("benched"), person.id, Option(new DateTime()), Option(new DateTime())) -> Set(0, Option(0), 3, 300, Option(new DateTime()), Option(new DateTime())),
+             Exercise(0, squats.id, Option(0), Option("Squats a lots"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))) -> Set(0, Option(0), 3, 300, Option(new DateTime()), Option(new DateTime())),
+             Exercise(0, bench.id, Option(0), Option("benched"), person.id, Option(new DateTime().plusDays(1)), Option(new DateTime().plusDays(1))) -> Set(0, Option(0), 3, 300, Option(new DateTime()), Option(new DateTime()))
            )
-         ), 
-         Duration.Inf
-       )
+       // i should move the set tests into another scenario 
+       Await.result(exerciseDao.createWorkout(exerciseSetMapping), Duration.Inf)
+       val e = Await.result(exerciseDao.findLast(10), Duration.Inf)
+       val s = Await.result(setDao.findLast(10), Duration.Inf)
+
+       e.length must equalTo(5)
+       s.length must equalTo(4)
 
        val dates = Await.result(exerciseDao.dates(), Duration.Inf)
        dates.length must equalTo(2)
 
+
        val workouts = Await.result(exerciseDao.workouts(2), Duration.Inf)
 
-       workouts.length must equalTo(2)
+       workouts.items must have length(2)
 
      }
    }

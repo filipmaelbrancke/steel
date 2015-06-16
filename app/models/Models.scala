@@ -12,6 +12,6 @@ case class ExerciseType(id: Long, kind: String, name: String, description: Strin
 
 case class Exercise(id: Long, kind: Long, time: Option[Float], notes: Option[String], person: Long, createdAt: Option[DateTime], updatedAt: Option[DateTime])
 
-case class Set(id: Long, exercise: Long, reps: Long, completed: Long, createdAt: Option[DateTime], updatedAt: Option[DateTime])
+case class Set(id: Long, exercise: Option[Long], reps: Long, weight: Float, createdAt: Option[DateTime], updatedAt: Option[DateTime])
 
 

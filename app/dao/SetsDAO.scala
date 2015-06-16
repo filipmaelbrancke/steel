@@ -21,15 +21,16 @@ trait SetsComponent {
   class Sets(tag: Tag) extends Table[Set](tag, "set") {
     
     def id        = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def exercise  = column[Long]("exercise")
+    def exercise  = column[Option[Long]]("exercise")
     def reps      = column[Long]("reps")
-    def completed = column[Long]("completed")
+    def weight    = column[Float]("weight", O.SqlType("numeric(5,2)"))
     def createdAt = column[Option[DateTime]]("created_at")
     def updatedAt = column[Option[DateTime]]("updated_at")
-    def *         = (id, 
+    def *         = (
+      id, 
       exercise,
       reps,
-      completed, 
+      weight, 
       createdAt, 
       updatedAt ) <> (Set.tupled, Set.unapply _)
     

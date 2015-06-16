@@ -22,9 +22,6 @@ CREATE TABLE exercise_type (
 CREATE TABLE exercise (
   id serial NOT NULL,
   kind int references exercise_type(id) NOT NULL,
-  reps int,
-  sets int,
-  weight numeric(5,2),
   time numeric(5,2),
   notes text,
   person  int references person(id),
@@ -36,8 +33,7 @@ CREATE TABLE exercise (
 CREATE TABLE set (
   id serial NOT NULL,
   exercise int references exercise(id),
-  sets int,
-  completed int,
+  reps int,
   weight numeric(5,2),
   created_at timestamp with time zone default(now() at time zone 'utc'),
   updated_at timestamp with time zone,
