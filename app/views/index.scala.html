@@ -1,4 +1,4 @@
-@(workouts: Page[(Exercise, ExerciseType)])(implicit flash: play.api.mvc.Flash, messages: Messages)
+@(workouts: Page[(Exercise, ExerciseType, Set)])(implicit flash: play.api.mvc.Flash, messages: Messages)
 
 @main("Steel - The Workout Tracker") {
   <div class="container">
@@ -27,12 +27,12 @@
             <tbody>
             @Option(workouts.items).map { exercises =>
               @exercises.map {
-                case (exercise, exerciseType) => {
+                case (exercise, exerciseType, set) => {
                 <tr>
                   <td>@exerciseType.name</td>
+                  <td>@set.reps</td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>@set.weight</td>
                   <td>@exercise.notes</td>
                 </tr>
                 }

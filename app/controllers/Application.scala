@@ -29,7 +29,7 @@ object Application extends Controller {
   val Home = Redirect(routes.Application.index)
 
   def index = Action.async { implicit request => 
-    val workouts = exerciseDao.findWithType(10)
+    val workouts = exerciseDao.workouts(10)
     workouts.map(e => Ok(html.index(e)))
   }
 
@@ -37,6 +37,7 @@ object Application extends Controller {
     mapping(
       "id"        -> longNumber,
       "kind"      -> longNumber,
+      "sets"      -> list(text),
       "time"      -> optional(of(floatFormat)),
       "notes"     -> optional(text),
       "person"    -> longNumber,
